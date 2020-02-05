@@ -54,7 +54,7 @@
                 this.context.targetEl.innerHTML=`<h2>${Mura.escapeHTML(this.context.mytitle)}</h2>`;
                 return this;
             }
-      });
+        });
     });
 
     Mura.init(MuraConfig);
@@ -63,7 +63,7 @@
         Mura.loader()
         .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.min.css')
         .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.skin.css')
-        .loadcss('css/site.css');
+        .loadcss('assets/css/site.css');
 
         function render(){
             let hash= location.hash || '#';
