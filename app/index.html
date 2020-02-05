@@ -42,7 +42,7 @@
 
   <!-- This init's Mura.js and renders the content.  This could be another file -->
   <script>
-    var config={
+    var MuraConfig={
         siteid: 'default',
         endpoint:'http://localhost:8888'
     };
@@ -57,7 +57,7 @@
       });
     });
 
-    Mura.init(config);
+    Mura.init(MuraConfig);
 
     Mura(function(){
         Mura.loader()
@@ -66,56 +66,55 @@
         .loadcss(Mura.endpoint + '/themes/default/css/site.css');;
 
         function render(){
-        let hash= location.hash || '#';
-        
-        function buildNav(container,parentid){
-            container.html('');
+            let hash= location.hash || '#';
+            
+            function buildNav(container,parentid){
+                container.html('');
 
-            if(parentid=='00000000000000000000000000000000001'){
-                container.html('<li><a href="./#">Home</a></li>');
-            }
+                if(parentid=='00000000000000000000000000000000001'){
+                    container.html('<li><a href="./#">Home</a></li>');
+                }
 
-            Mura.getFeed('content')
-            .where()
-            .prop('parentid').isEQ(parentid)
-            .getQuery()
-            .then(function(collection){
-            collection.forEach(function(item){
-                container.append('<li><a href="#' + item.get('filename') + '">' + item.get('menutitle') + '</a></li>');
-            });
-            })
-        }
-        
-        var query=Mura.getQueryStringParams();
-       
-        Mura.renderFilename(
-            hash.split('#')[1],
-            Mura.getQueryStringParams()
-        ).then(function(content){
-
-            Mura('.mura-html-queues').html(content.get('htmlheadqueue') + content.get('htmlfootqueue'));
-
-            Mura.extend(Mura,Mura.extend(content.get('config'),config));
-         
-            if(query.display){
-                Mura('.mura-region-container[data-region="primarycontent"]').html(content.get('body'));
-            } else if (query.doaction && query.doaction=='logout'){
-                alert(1)
-                Mura.logout().then( function(){
-                    location.href="./";
+                Mura.getFeed('content')
+                .where()
+                .prop('parentid').isEQ(parentid)
+                .getQuery()
+                .then(function(collection){
+                collection.forEach(function(item){
+                    container.append('<li><a href="#' + item.get('filename') + '">' + item.get('menutitle') + '</a></li>');
                 });
-            } else {
-                Mura('.mura-region-container').each(function(){
-                var item=Mura(this);
-                item.html(
-                    content.renderDisplayRegion(
-                    item.data('region')
-                    )
-                );
-            })
+                })
+            }
+            
+            var query=Mura.getQueryStringParams();
+        
+            Mura.renderFilename(
+                hash.split('#')[1],
+                Mura.getQueryStringParams()
+            ).then(function(content){
+
+                Mura('.mura-html-queues').html(content.get('htmlheadqueue') + content.get('htmlfootqueue'));
+
+                Mura.extend(Mura,Mura.extend(content.get('config')));
+            
+                if(query.display){
+                    Mura('.mura-region-container[data-region="primarycontent"]').html(content.get('body'));
+                } else if (query.doaction && query.doaction=='logout'){
+                    alert(1)
+                    Mura.logout().then( function(){
+                        location.href="./";
+                    });
+                } else {
+                    Mura('.mura-region-container').each(function(){
+                    var item=Mura(this);
+                    item.html(
+                        content.renderDisplayRegion(
+                        item.data('region')
+                        )
+                    );
+                })
             }
            
-
             buildNav(
                 Mura('.mura-primary-nav'),
                 '00000000000000000000000000000000001'
