@@ -1,3 +1,37 @@
+#primary-nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    }
+
+    #primary-nav li {
+    float: left;
+    }
+
+    #primary-nav li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+    font-weight: bolder;
+    }
+
+    #primary-nav li a:hover {
+    background-color: white;
+    }  
+
+    #primary-nav nav {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    div.mura-object[data-object="header"] {
+        padding-top: 20px;
+    }
+
 /*!
  * Bootstrap v4.4.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors
