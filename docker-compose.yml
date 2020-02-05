@@ -4,6 +4,7 @@ services:
   mura:
     depends_on:
       - mysql
+      - nginx
     build:
       context: ./
       dockerfile: Dockerfile.mura
@@ -41,6 +42,16 @@ services:
         - "8888:8888"
     healthcheck:
       disable: true
+  
+  nginx:
+    build:
+      context: ./
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "8080:8080"
+      environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=8080
 
   #MySQL
   mysql:

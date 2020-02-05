@@ -13,8 +13,5 @@ RUN ln -sf /dev/stdout /opt/lucee/web/logs/application.log \
 
 COPY web.xml /usr/local/tomcat/conf/
 
-# Copy Mura files
-# COPY . /var/www
-
 # Add healthcheck
 #HEALTHCHECK --start-period=3m CMD curl --fail http://localhost:8888/?healthcheck || exit 1
