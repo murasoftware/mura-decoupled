@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+      #primary-nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333333;
+        }
+
+        #primary-nav li {
+        float: left;
+        }
+
+        #primary-nav li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 16px;
+        text-decoration: none;
+        }
+
+        #primary-nav li a:hover {
+        background-color: #111111;
+        }  
+
+        #primary-nav nav {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        div.mura-object[data-object="header"] {
+            padding-top: 20px;
+        }
+        
+    </style>
+  <!-- This is include the main Mura.js lib -->
+  <script src="http://localhost:8888/core/modules/v1/core_assets/js/mura.js"></script>
+
+  <!-- This init's Mura.js and renders the content.  This could be another file -->
+  <script>
+
+    Mura.preInit(function(){
+        Mura.Module.Examplejs = Mura.UI.extend({
+            renderClient: function() {
+                this.context.mytitle = this.context.mytitle || "The 'Title' param has not been assigned";
+                this.context.targetEl.innerHTML=`<h2>${Mura.escapeHTML(this.context.mytitle)}</h2>`;
+                return this;
+            }
+      });
+    });
+
+    Mura.init({
+        siteid:'default',
+        endpoint:'http://localhost:8888'
+    });
+
+    Mura(function(){
+        Mura.loader()
+        .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.min.css')
+        .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.skin.css');
+
+        function render(){
+        let hash= location.hash || '#';
+        
+        function buildNav(container,parentid){
+            container.html('');
+
+            if(parentid=='00000000000000000000000000000000001'){
+                container.html('<li><a href="./#">Home</a></li>');
+            }
+
+            Mura.getFeed('content')
+            .where()
+            .prop('parentid').isEQ(parentid)
+            .getQuery()
+            .then(function(collection){
+            collection.forEach(function(item){
+                container.append('<li><a href="#' + item.get('filename') + '">' + item.get('menutitle') + '</a></li>');
+            });
+            })
+        }
+        
+        Mura.renderFilename(
+            hash.split('#')[1],
+            Mura.getQueryStringParams()
+        ).then(function(content){
+
+            Mura('.mura-html-queues').html(content.get('htmlheadqueue') + content.get('htmlfootqueue'));
+
+            Mura.extend(Mura,content.get('config'));
+
+            Mura('.mura-region-container').each(function(){
+                var item=Mura(this);
+                item.html(
+                    content.renderDisplayRegion(
+                    item.data('region')
+                    )
+                );
+            })
+
+            buildNav(
+                Mura('.mura-primary-nav'),
+                '00000000000000000000000000000000001'
+            );
+
+            Mura(document).processMarkup();
+
+        });
+        }
+
+        render();
+
+        Mura(window).on('hashchange', render);
+
+    });
+  </script>
+</head>
+<body>
+    <div class="wrapper">
+        <nav id="primary-nav">
+        <ul class="mura-primary-nav"></ul>
+        </nav>
+        <div class="content">
+            <div class="mura-region-container" data-region="primarycontent"></div>
+        </div>
+    </div>
+     <div class="mura-html-queues"></div>
+</body>
+</html>

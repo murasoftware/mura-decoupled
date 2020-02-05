@@ -1,0 +1,26 @@
+{
+	"global":{
+		"rendererProperties":{
+			"templateArray":["Default"],
+			"collectionLayoutArray":[],
+			"hashurls":true,
+			"primaryContentTypes":"Page,Link,File"
+		},
+		"modules":{
+			"Example":{
+				"name":"Examplejs",
+				"contenttypes":"*",
+				"configurator":"<div class=mura-control-group\">\r\n<label>Example Title<\/label>\r\n<input type=\"text\" name=\"mytitle\" class=\"objectParam\"\/>\r\n<\/div>"
+			}
+		},
+	"sites":{
+		"default":{
+			"rendererProperties":{
+			},
+			"modules":{
+
+			}
+		}
+	}
+	}
+}

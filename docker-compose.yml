@@ -1,0 +1,64 @@
+version: "3.5"
+services:
+  #Mura Service
+  mura:
+    depends_on:
+      - mysql
+    build:
+      context: ./
+      dockerfile: Dockerfile.mura
+    environment:
+      MURA_ADMIN_USERNAME: admin
+      MURA_ADMIN_PASSWORD: admin
+      MURA_ADMINEMAIL: example@localhost.com
+      MURA_APPRELOADKEY: appreload
+      MURA_DATASOURCE: muradb
+      MURA_DATABASE: muradb
+      MURA_DBTYPE: mysql
+      MURA_DBCONNECTIONSTRING: "jdbc:mysql://mysql:3306/muradb?useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=true"
+      MURA_DBCLASS: com.mysql.cj.jdbc.Driver
+      MURA_DBUSERNAME: root
+      MURA_DBPASSWORD: password
+      MURA_SITEIDINURLS: "false"
+      MURA_RELATEDCONTENTSETID: "*"
+      MURA_INDEXFILEINURLS: "false"
+      MURA_ADMINEMAIL: ${MURA_ADMINEMAIL:-info@example.com}
+      MURA_PORT: ${WEB_PORT:-8888}
+      MURA_TIMEZONE: "PST"
+      MURA_ENABLEDEVELOPMENTSETTINGS: "true"
+      MURA_MAILSERVERIP: "mailcatcher"
+      MURA_MAILSERVERSMTPPORT: ${SMTP_PORT:-1025}
+      MURA_USEDEFAULTSMTPSERVER: "false"
+      MURA_EXTERNALCONFIG: "http://host.docker.internal:8080/mura.config.json"
+      MURA_DEFAULTTHEMEURL: "https://github.com/murasoftware/mura-minimal/archive/master.zip"
+    volumes:
+        - ../mura/app/core:/var/www/core
+        - ../mura/app/admin:/var/www/admin
+        - ../mura/app/modules:/var/www/modules
+        - ../mura/app/themes:/var/www/themes
+        - mura_decoupled_sites_data:/var/www/sites
+    ports:
+        - "8888:8888"
+    healthcheck:
+      disable: true
+
+  #MySQL
+  mysql:
+    image: mysql:latest
+    environment:
+        MYSQL_ROOT_PASSWORD: password
+        MYSQL_DATABASE: muradb
+    volumes:
+        - mura_decoupled_db_data:/var/lib/mysql
+    ports:
+        - "55555:3306"
+
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - "${MAILCATCHER_PORT:-1080}:1080"
+      - "${SMTP_PORT:-1025}:1025"
+
+volumes:
+  mura_decoupled_sites_data:
+  mura_decoupled_db_data:
