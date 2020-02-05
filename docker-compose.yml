@@ -30,12 +30,12 @@ services:
       MURA_MAILSERVERIP: "mailcatcher"
       MURA_MAILSERVERSMTPPORT: ${SMTP_PORT:-1025}
       MURA_USEDEFAULTSMTPSERVER: "false"
-      MURA_EXTERNALCONFIG: "http://host.docker.internal:8080/mura.config.json"
+      MURA_EXTERNALCONFIG: "http://host.docker.internal:80/mura.config.json"
       MURA_DEFAULTTHEMEURL: "https://github.com/murasoftware/mura-minimal/archive/master.zip"
     volumes:
         - ../mura/app/core:/var/www/core
         - ../mura/app/admin:/var/www/admin
-        - ../mura/app/modules:/var/www/modules
+        #- ../mura/app/modules:/var/www/modules
         - ../mura/app/themes:/var/www/themes
         - mura_decoupled_sites_data:/var/www/sites
     ports:
@@ -48,10 +48,7 @@ services:
       context: ./
       dockerfile: Dockerfile.nginx
     ports:
-      - "8080:8080"
-    environment:
-      - NGINX_HOST=localhost
-      - NGINX_PORT=8080
+      - "80:80"
     volumes:
       - ./app:/usr/share/nginx/html
 
