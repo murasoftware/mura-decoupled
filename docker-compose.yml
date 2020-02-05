@@ -49,9 +49,11 @@ services:
       dockerfile: Dockerfile.nginx
     ports:
       - "8080:8080"
-      environment:
+    environment:
       - NGINX_HOST=localhost
       - NGINX_PORT=8080
+    volumes:
+        - ../app:/var/www/core:/usr/share/nginx/html
 
   #MySQL
   mysql:
