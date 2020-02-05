@@ -42,12 +42,18 @@
 
   <!-- This init's Mura.js and renders the content.  This could be another file -->
   <script>
-    var MuraConfig={
+    Mura.init({
         siteid: 'default',
         endpoint:'http://localhost:8888'
-    };
+    });
 
-    Mura.preInit(function(){
+    Mura(function(){
+        Mura.loader()
+        .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.min.css')
+        .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.skin.css')
+        .loadcss('assets/css/site.css');
+
+        //This is also registered in the mura.config.json
         Mura.Module.Examplejs = Mura.UI.extend({
             renderClient: function() {
                 this.context.mytitle = this.context.mytitle || "The 'Title' param has not been assigned";
@@ -55,15 +61,6 @@
                 return this;
             }
         });
-    });
-
-    Mura.init(MuraConfig);
-
-    Mura(function(){
-        Mura.loader()
-        .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.min.css')
-        .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.skin.css')
-        .loadcss('assets/css/site.css');
 
         function render(){
             let hash= location.hash || '#';
