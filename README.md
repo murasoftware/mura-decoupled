@@ -1,4 +1,4 @@
-# MuraNuxtJSDecoupled
+# Mura Decoupled
 
 ## Initial Startup
 
