@@ -53,7 +53,7 @@ services:
       - NGINX_HOST=localhost
       - NGINX_PORT=8080
     volumes:
-        - ../app:/var/www/core:/usr/share/nginx/html
+      - ./app:/usr/share/nginx/html
 
   #MySQL
   mysql:
