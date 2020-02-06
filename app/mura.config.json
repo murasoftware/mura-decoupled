@@ -2,7 +2,7 @@
 	"global":{
 		"rendererProperties":{
 			"templateArray":["Default"],
-			"collectionLayoutArray":[],
+			"collectionLayoutArray":["Examplecollectionlayout"],
 			"hashurls":true,
 			"primaryContentTypes":"Page,Link,File"
 		},
@@ -11,6 +11,10 @@
 				"name":"Examplejs",
 				"contenttypes":"*",
 				"configurator":"http://host.docker.internal/configurators/examplejs.html"
+			},
+			"Examplecollectionlayout":{
+				"name":"Example Collection Layout",
+				"contenttypes":""
 			}
 		},
 	"sites":{
