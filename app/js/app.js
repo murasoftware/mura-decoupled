@@ -87,7 +87,7 @@ Mura(function(){
         function buildNav(container,parentid){
             container.html('');
 
-            if(parentid=='00000000000000000000000000000000001'){
+            if(parentid==Mura.homeid){
                 container.html('<li><a href="./#">Home</a></li>');
             }
 
@@ -133,7 +133,7 @@ Mura(function(){
        
         buildNav(
             Mura('.mura-primary-nav'),
-            '00000000000000000000000000000000001'
+            Mura.homeid
         );
 
         Mura(document).processMarkup();
