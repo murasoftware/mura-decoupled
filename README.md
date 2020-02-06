@@ -27,7 +27,7 @@ The intergration is entirely done with Mura.js which can be installed as an npm 
 
 ## Mura Version
 
-You must use Mura 10 of higher
+You must use Mura 10 or higher
 
 ## NPM
 https://www.npmjs.com/package/mura.js
