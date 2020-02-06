@@ -23,7 +23,7 @@ And finally go to your Mura admin (http://localhost:8888/admin) and reload Mura 
 
 # Key Points of Integration with Mura
 
-The intergration is entirely done with Mura.js installed as an npm within the and project while running Mura's official docker container.
+The intergration is entirely done with Mura.js which can be installed as an npm within the and project while running Mura's official docker container.
 
 ## Mura Version
 
@@ -48,11 +48,11 @@ With this use case Mura modules, templates and content type includes are now loc
 
 There is a mura.config.json file that the Mura service reads in when loading to get what it needs to know from the client.
 
-https://github.com/murasoftware/blob/master/app/mura.config.json
+https://github.com/murasoftware/mura-decoupled/blob/master/app/mura.config.json
 
 You tell Mura about it as an environment variable
 
-https://github.com/murasoftware/blob/master/docker-compose.yml#L22
+https://github.com/murasoftware/mura-decoupled/blob/master/docker-compose.yml#L11
 
 
 ## Mura ORM Assembler and Scaffolder
