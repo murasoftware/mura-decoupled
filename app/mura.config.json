@@ -10,7 +10,7 @@
 			"Examplejs":{
 				"name":"Examplejs",
 				"contenttypes":"*",
-				"configurator":"http://host.docker.internal/configurators/examplejs.html"
+				"configurator":"http://host.docker.internal/js/configurators/examplejs.html"
 			},
 			"Examplecollectionlayout":{
 				"name":"Example Collection Layout",
