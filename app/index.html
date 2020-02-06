@@ -41,8 +41,51 @@
         //This is also registered in the mura.config.json
         Mura.Module.Examplecollectionlayout = Mura.UI.extend({
             renderClient: function() {
-                this.context.targetEl.innerHTML=`<h2>Not Implemented Yet</h2>`;
+                if(this.context.collection.length()){
+                    var returnString="<ul>";
+                        this.context.collection.forEach(function(item){
+                        returnString +=`<li><a href="${Mura.escapeHTML(item.get('url'))}">${Mura.escapeHTML(item.get('menutitle'))}</a>`;
+                    });
+
+                    returnString += "</ul>";
+                
+                    if(this.context.collection.has('first')){
+                        returnString += `<button class="pagenav" data-page="first">First</button>`;
+                    }
+                    if(this.context.collection.has('previous')){
+                        returnString += `<button class="pagenav" data-page="previous">Previous</button>`;
+                    }
+                    if(this.context.collection.has('next')){
+                        returnString += `<button class="pagenav" data-page="next">Next</button>`;
+                    }
+                    if(this.context.collection.has('last')){
+                        returnString += `<button class="pagenav" data-page="last">Last</button>`;
+                    }
+                       
+                    this.context.targetEl.innerHTML=returnString;
+
+                    var self=this;
+
+                    Mura(this.context.targetEl)
+                        .find(".pagenav")
+                        .on("click",function(){
+                            self.goToPage(Mura(this).data('page'));
+                        });
+
+                } else {
+                    this.context.targetEl.innerHTML="<p>No content available</p>";
+                }
+            
                 return this;
+            },
+            goToPage:function(link){
+                link=link || 'missing';
+                if(this.context.collection.has(link)){
+                    this.context.collection.get(link).then((collection)=>{
+                        this.context.collection=collection;
+                        this.renderClient();
+                    })
+                }
             }
         });
 
