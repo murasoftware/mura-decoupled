@@ -114,12 +114,18 @@ Mura(function(){
 
             Mura.extend(Mura,Mura.extend(content.get('config')));
         
-            if(query.display){
-                Mura('.mura-region-container[data-region="primarycontent"]').html(content.get('body'));
-            } else if (query.doaction && query.doaction=='logout'){
+            if (query.doaction && query.doaction=='logout'){
                 Mura.logout().then( function(){
                     location.href="./";
                 });
+            } else if(query.display 
+                || (
+                    content.get('type')=='Page' 
+                    && (
+                        content.get('subtype')=='Blog Post' || content.get('subtype')=='Article'
+                    )
+                )){
+                Mura('.mura-region-container[data-region="primarycontent"]').html(content.get('body'));
             } else {
                 Mura('.mura-region-container').each(function(){
                 var item=Mura(this);
