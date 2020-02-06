@@ -17,8 +17,29 @@
         .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.skin.css')
         .loadcss('assets/css/site.css');
 
+        var bodyTemplate=`
+        <nav id="primary-nav">
+            <ul class="mura-primary-nav"></ul>
+        </nav>
+        <div class="mura-region-container" data-region="primarycontent"></div>
+        <footer>
+            <!-- Create a component named "Footer" and it will render here-->
+            <div class="mura-object" data-object="component" data-objectid="footer"></div>
+        </footer>
+        <div class="mura-html-queues"></div>
+        `;
+
         //This is also registered in the mura.config.json
         Mura.Module.Examplejs = Mura.UI.extend({
+            renderClient: function() {
+                this.context.mytitle = this.context.mytitle || "The 'Title' param has not been assigned";
+                this.context.targetEl.innerHTML=`<h2>${Mura.escapeHTML(this.context.mytitle)}</h2>`;
+                return this;
+            }
+        });
+
+        //This is also registered in the mura.config.json
+        Mura.Module.Examplecollectionlayout = Mura.UI.extend({
             renderClient: function() {
                 this.context.mytitle = this.context.mytitle || "The 'Title' param has not been assigned";
                 this.context.targetEl.innerHTML=`<h2>${Mura.escapeHTML(this.context.mytitle)}</h2>`;
@@ -36,6 +57,7 @@
                     container.html('<li><a href="./#">Home</a></li>');
                 }
 
+                Mura.getEntity('content')
                 Mura.getFeed('content')
                 .where()
                 .prop('parentid').isEQ(parentid)
@@ -61,7 +83,6 @@
                 if(query.display){
                     Mura('.mura-region-container[data-region="primarycontent"]').html(content.get('body'));
                 } else if (query.doaction && query.doaction=='logout'){
-                    alert(1)
                     Mura.logout().then( function(){
                         location.href="./";
                     });
@@ -86,6 +107,7 @@
         });
         }
 
+        Mura('body').append(bodyTemplate);
         render();
 
         Mura(window).on('hashchange', render);
@@ -93,15 +115,5 @@
     });
   </script>
 </head>
-<body>
-    <nav id="primary-nav">
-        <ul class="mura-primary-nav"></ul>
-    </nav>
-    <div class="mura-region-container" data-region="primarycontent"></div>
-    <footer>
-        <!-- Create a component named "Footer" and it will render here-->
-        <div class="mura-object" data-object="component" data-objectid="footer"></div>
-    </footer>
-     <div class="mura-html-queues"></div>
-</body>
+<body></body>
 </html>
