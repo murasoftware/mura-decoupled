@@ -1,10 +1,14 @@
  (function(){
-       /**
+    /**
     * currentContent
     * This holds the current content node beans
     */
     let currentContent;
 
+    /**
+     * The preInit() block fires before Mura executes any Mura() blocks
+     * It's used to configure Mura before rendering begins
+     */
     Mura.preInit(function(){
         /**
         * Modules
@@ -105,14 +109,6 @@
             }
         });
     })
-    
-    /**
-     * Initialize Mura with the endpoint and siteid
-     */
-    Mura.init({
-        siteid: 'default',
-        endpoint:'http://localhost:8888'
-    });
 
     /**
      * Primary App
@@ -129,19 +125,22 @@
         .loadcss('app/css/site.css');
 
         /**
-        * Primary Page Template
+        * Page Templates
+        * You may Mura core aware of them in your mura.config.json
         */
-        const bodyTemplate=`
-        <nav id="primary-nav">
-            <ul class="mura-primary-nav"></ul>
-        </nav>
-        <div class="mura-region-container" data-region="primarycontent"></div>
-        <footer>
-            <!-- Create a component named "Footer" and it will render here-->
-            <div class="mura-object" data-object="component" data-objectid="footer"></div>
-        </footer>
-        <div class="mura-html-queues"></div>
-        `;
+        const templates={
+            default:`
+                <nav id="primary-nav">
+                    <ul class="mura-primary-nav"></ul>
+                </nav>
+                <div class="mura-region-container" data-region="primarycontent"></div>
+                <footer>
+                    <!-- Create a component named "Footer" and it will render here-->
+                    <div class="mura-object" data-object="component" data-objectid="footer"></div>
+                </footer>
+                <div class="mura-html-queues"></div>
+                `
+         };
 
         /**
         * Render
@@ -163,9 +162,9 @@
                 .prop('parentid').isEQ(parentid)
                 .getQuery()
                 .then(function(collection){
-                collection.forEach(function(item){
-                    container.append('<li><a href="#' + item.get('filename') + '">' + item.get('menutitle') + '</a></li>');
-                });
+                    collection.forEach(function(item){
+                        container.append('<li><a href="#' + item.get('filename') + '">' + item.get('menutitle') + '</a></li>');
+                    });
                 })
             }
             
@@ -177,10 +176,10 @@
             ).then(function(content){
 
                 currentContent=content;
+                
+                Mura('body').html(templates[content.get('template').split('.')[0]]);
 
                 Mura('.mura-html-queues').html(content.get('htmlheadqueue') + content.get('htmlfootqueue'));
-
-                Mura.extend(Mura,Mura.extend(content.get('config')));
             
                 if (query.doaction && query.doaction=='logout'){
                     Mura.logout().then( function(){
@@ -203,6 +202,8 @@
                         )
                     );
                 })
+
+                Mura(document).processMarkup();
             }
         
             buildNav(
@@ -210,15 +211,22 @@
                 Mura.homeid
             );
 
-            Mura(document).processMarkup();
+        
 
         });
         }
 
-        Mura('body').append(bodyTemplate);
         render();
 
         Mura(window).on('hashchange', render);
 
     });
+
+    /**
+    * Initialize Mura with the endpoint and siteid
+    */
+    Mura.init({
+        siteid: 'default',
+        endpoint:'http://localhost:8888'
+    });  
 })();
