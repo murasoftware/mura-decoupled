@@ -197,23 +197,21 @@
                     Mura('.mura-region-container').each(function(){
                     let item=Mura(this);
                     item.html(
-                        content.renderDisplayRegion(
-                        item.data('region')
+                            content.renderDisplayRegion(
+                            item.data('region')
                         )
-                    );
-                })
-
+                        );
+                    })
+                }
+            
                 Mura(document).processMarkup();
-            }
-        
-            buildNav(
-                Mura('.mura-primary-nav'),
-                Mura.homeid
-            );
+               
+                buildNav(
+                    Mura('.mura-primary-nav'),
+                    Mura.homeid
+                );
 
-        
-
-        });
+            });
         }
 
         render();
