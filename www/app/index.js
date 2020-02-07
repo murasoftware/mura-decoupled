@@ -36,17 +36,15 @@ Mura(function(){
     //This is also registered in the mura.config.json
     Mura.Module.Header = Mura.UI.extend({
         renderClient: async function() {
-            let title=this.context.title || currentContent.get('title');
-            let summary=this.context.summary || currentContent.get('summary');
+            this.context.title=this.context.title || currentContent.get('title');
+            this.context.summary=this.context.summary || currentContent.get('summary');
+            
             let crumbs='';
-
-            let crumbCollection=await currentContent
+            const crumbCollection=await currentContent
                 .get('crumbs')
                 .then((crumbs)=>{
                     return crumbs;
                 });
-
-            
 
             crumbCollection.forEach((crumb,idx)=>{
                 crumbs += `<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="${(!idx)?'first':''} breadcrumb-item">
