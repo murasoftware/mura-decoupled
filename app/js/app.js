@@ -36,7 +36,7 @@ Mura(function(){
             if(this.context.collection.length()){
                 var returnString="<ul>";
                     this.context.collection.forEach(function(item){
-                    returnString +=`<li><a href="${Mura.escapeHTML(item.get('url'))}">${Mura.escapeHTML(item.get('menutitle'))}</a>`;
+                    returnString +=`<li><a href="${Mura.escapeHTML(item.get('url'))}">${Mura.escapeHTML(item.get('menutitle'))}</a></li>`;
                 });
 
                 returnString += "</ul>";
