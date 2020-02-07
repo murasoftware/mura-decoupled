@@ -1,17 +1,34 @@
+ /**
+ * Initialize Mura with the endpoint and siteid
+ */
 Mura.init({
     siteid: 'default',
     endpoint:'http://localhost:8888'
 });
 
+ /**
+ * Primary App
+ */
 Mura(function(){
 
+    /**
+    * currentContent
+    * This holds the current content node beans
+    */
     let currentContent;
     
+    /**
+    * Loaded associated style assets
+    * This could easily be moved to link tags
+    */
     Mura.loader()
     .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.min.css')
     .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.skin.css')
     .loadcss('app/css/site.css');
 
+    /**
+    * Primary Page Template
+    */
     const bodyTemplate=`
     <nav id="primary-nav">
         <ul class="mura-primary-nav"></ul>
@@ -24,7 +41,11 @@ Mura(function(){
     <div class="mura-html-queues"></div>
     `;
 
-    //This is also registered in the mura.config.json
+    /**
+	* Modules
+    * This is also registered in the mura.config.json
+    * Associated configurators are in the ./configurators directory
+	*/
     Mura.Module.Examplejs = Mura.UI.extend({
         renderClient: function() {
             this.context.mytitle = this.context.mytitle || "The 'Title' param has not been assigned";
@@ -33,7 +54,6 @@ Mura(function(){
         }
     });
 
-    //This is also registered in the mura.config.json
     Mura.Module.Header = Mura.UI.extend({
         renderClient: async function() {
             this.context.title=this.context.title || currentContent.get('title');
@@ -70,7 +90,6 @@ Mura(function(){
         }
     });
 
-    //This is also registered in the mura.config.json
     Mura.Module.Examplecollectionlayout = Mura.UI.extend({
         renderClient: function() {
             if(this.context.collection.length()){
@@ -121,6 +140,10 @@ Mura(function(){
         }
     });
 
+    /**
+	* Render
+    * This handles the basic page rendering
+	*/
     function render(){
         let hash= location.hash || '#';
         
