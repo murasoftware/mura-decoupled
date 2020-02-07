@@ -46,6 +46,7 @@ Mura(function(){
                     return crumbs;
                 });
 
+            crumbCollection.properties.items=crumbCollection.properties.items.reverse();
             crumbCollection.forEach((crumb,idx)=>{
                 crumbs += `<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="${(!idx)?'first':''} breadcrumb-item">
                 <a itemprop="item" href="${crumb.get('url')}"><span itemprop="name">${Mura.escapeHTML(crumb.get('menutitle'))}</span></a>   
