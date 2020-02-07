@@ -4,12 +4,15 @@ Mura.init({
 });
 
 Mura(function(){
+
+    let currentContent;
+    
     Mura.loader()
     .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.min.css')
     .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.skin.css')
     .loadcss('app/css/site.css');
 
-    var bodyTemplate=`
+    const bodyTemplate=`
     <nav id="primary-nav">
         <ul class="mura-primary-nav"></ul>
     </nav>
@@ -31,10 +34,49 @@ Mura(function(){
     });
 
     //This is also registered in the mura.config.json
+    Mura.Module.Header = Mura.UI.extend({
+        renderClient: async function() {
+            let title=this.context.title || currentContent.get('title');
+            let summary=this.context.summary || currentContent.get('summary');
+            let crumbs='';
+
+            let crumbCollection=await currentContent
+                .get('crumbs')
+                .then((crumbs)=>{
+                    return crumbs;
+                });
+
+            
+
+            crumbCollection.forEach((crumb,idx)=>{
+                crumbs += `<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="${(!idx)?'first':''} breadcrumb-item">
+                <a itemprop="item" href="${crumb.get('url')}"><span itemprop="name">${Mura.escapeHTML(crumb.get('menutitle'))}</span></a>   
+                <meta itemprop="position" content="${idx+1}">
+                </li>`
+            });
+           
+
+            let returnString=`
+            <header>
+                <div class="container">
+                <nav aria-label="breadcrumb"><ol itemscope="" itemtype="http://schema.org/BreadcrumbList" id="crumblist" class="mura-breadcrumb breadcrumb">                    
+                    ${crumbs}
+                </ol></nav>
+                <h1>${Mura.escapeHTML(this.context.title)}</h1>
+                ${(this.context.summary && this.context.summary != '<p></p>') ? this.context.summary:''}
+                </div>
+            </header>`;
+
+            this.context.targetEl.innerHTML=returnString;
+            return this;
+        }
+    });
+
+    //This is also registered in the mura.config.json
     Mura.Module.Examplecollectionlayout = Mura.UI.extend({
         renderClient: function() {
             if(this.context.collection.length()){
-                var returnString="<ul>";
+                let returnString="<ul>";
                     this.context.collection.forEach(function(item){
                     returnString +=`<li><a href="${Mura.escapeHTML(item.get('url'))}">${Mura.escapeHTML(item.get('menutitle'))}</a></li>`;
                 });
@@ -56,7 +98,7 @@ Mura(function(){
                    
                 this.context.targetEl.innerHTML=returnString;
 
-                var self=this;
+                let self=this;
 
                 Mura(this.context.targetEl)
                     .find(".pagenav")
@@ -103,12 +145,14 @@ Mura(function(){
             })
         }
         
-        var query=Mura.getQueryStringParams();
+        let query=Mura.getQueryStringParams();
     
         Mura.renderFilename(
             hash.split('#')[1],
-            Mura.getQueryStringParams()
+            Mura.extend(Mura.getQueryStringParams(),{expand:"crumbs"})
         ).then(function(content){
+
+            currentContent=content;
 
             Mura('.mura-html-queues').html(content.get('htmlheadqueue') + content.get('htmlfootqueue'));
 
@@ -128,7 +172,7 @@ Mura(function(){
                 Mura('.mura-region-container[data-region="primarycontent"]').html(content.get('body'));
             } else {
                 Mura('.mura-region-container').each(function(){
-                var item=Mura(this);
+                let item=Mura(this);
                 item.html(
                     content.renderDisplayRegion(
                     item.data('region')

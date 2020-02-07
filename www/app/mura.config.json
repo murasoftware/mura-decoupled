@@ -10,11 +10,15 @@
 			"Examplejs":{
 				"name":"Examplejs",
 				"contenttypes":"*",
-				"configurator":"http://host.docker.internal/js/configurators/examplejs.html"
+				"configurator":"http://host.docker.internal/app/configurators/examplejs.html"
 			},
 			"Examplecollectionlayout":{
 				"name":"Example Collection Layout",
 				"contenttypes":""
+			},
+			"Header":{
+				"name":"Header",
+				"contenttypes":"*"
 			}
 		},
 	"sites":{
