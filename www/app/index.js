@@ -7,7 +7,7 @@ Mura(function(){
     Mura.loader()
     .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.min.css')
     .loadcss(Mura.endpoint + '/core/modules/v1/core_assets/css/mura.10.skin.css')
-    .loadcss('css/site.css');
+    .loadcss('app/css/site.css');
 
     var bodyTemplate=`
     <nav id="primary-nav">
