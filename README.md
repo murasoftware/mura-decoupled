@@ -48,7 +48,7 @@ With this use case Mura modules, templates and content type includes are now loc
 
 There is a mura.config.json file that the Mura service reads in when loading to get what it needs to know from the client.
 
-https://github.com/murasoftware/mura-decoupled/blob/master/www/mura.config.json
+https://github.com/murasoftware/mura-decoupled/blob/master/www/app/mura.config.json
 
 You tell Mura about it as an environment variable
 
