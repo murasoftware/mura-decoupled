@@ -210,6 +210,8 @@
 
                 currentContent=content;
                 
+               Mura.extend(Mura,content.get('config'));
+
                 Mura('body').html(templates[content.get('template').split('.')[0]]);
 
                 Mura('.mura-html-queues').html(content.get('htmlheadqueue') + content.get('htmlfootqueue'));
