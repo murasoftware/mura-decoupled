@@ -68,29 +68,63 @@
                     });
 
                     returnString += "</ul>";
-                
-                    if(this.context.collection.has('first')){
-                        returnString += `<button class="pagenav" data-page="first">First</button>`;
-                    }
-                    if(this.context.collection.has('previous')){
-                        returnString += `<button class="pagenav" data-page="previous">Previous</button>`;
-                    }
-                    if(this.context.collection.has('next')){
-                        returnString += `<button class="pagenav" data-page="next">Next</button>`;
-                    }
-                    if(this.context.collection.has('last')){
-                        returnString += `<button class="pagenav" data-page="last">Last</button>`;
-                    }
                     
+                    if(this.context.scrollpages){
+                        var pageid=Mura.createUUID();
+                        if(this.context.collection.get('totalpages') > this.context.collection.get('pageindex')){
+                            returnString += `<div id="mura-page-end-${pageid}"/>`;
+                        }
+                    } else {
+                        if(this.context.collection.has('first')){
+                            returnString += `<button class="pagenav" data-page="first">First</button>`;
+                        }
+                        if(this.context.collection.has('previous')){
+                            returnString += `<button class="pagenav" data-page="previous">Previous</button>`;
+                        }
+                        if(this.context.collection.has('next')){
+                            returnString += `<button class="pagenav" data-page="next">Next</button>`;
+                        }
+                        if(this.context.collection.has('last')){
+                            returnString += `<button class="pagenav" data-page="last">Last</button>`;
+                        }
+                    }
                     this.context.targetEl.innerHTML=returnString;
 
                     let self=this;
 
-                    Mura(this.context.targetEl)
-                        .find(".pagenav")
-                        .on("click",function(){
-                            self.goToPage(Mura(this).data('page'));
-                        });
+                    setTimeout(function(){
+                            if(self.context.scrollpages){
+                                Mura(function(){
+                                    var pageEnd=Mura('#mura-page-end-' + pageid);
+                        
+                                    function conditionalScroll(){
+                                        if(!mura.editing && pageEnd.length){
+                                            if(Mura.isScrolledIntoView(pageEnd.node)){
+                                                var collection=pageEnd.parent().closest('div.mura-object[data-object="collection"],div.mura-object[data-object="folder"]');
+                                                if(collection.length){
+                                                    collection.insertModuleAfter( Mura.extend(collection.data(),{pagenum:'#nextPage#',transient:true,label:""}) ) 
+                                                }
+                                            } else {
+                                                setTimeout(conditionalScroll,250);
+                                            }
+                                        }
+                                    }
+                        
+                                    conditionalScroll();
+                                })
+                            } else {
+                                Mura(self.context.targetEl)
+                                    .find(".pagenav")
+                                    .on("click",function(){
+                                        self.goToPage(Mura(this).data('page'));
+                                    });
+                            }
+                        },
+                        1
+                    );
+
+                    
+                
 
                 } else {
                     this.context.targetEl.innerHTML="<p>No matching content found</p>";
@@ -126,7 +160,7 @@
 
         /**
         * Page Templates
-        * You may Mura core aware of them in your mura.config.json
+        * You make Mura core aware of them in your mura.config.json
         */
         const templates={
             default:`
@@ -151,7 +185,6 @@
             
             function buildNav(container,parentid){
                 container.html('');
-
                 if(parentid==Mura.homeid){
                     container.html('<li><a href="./#">Home</a></li>');
                 }
