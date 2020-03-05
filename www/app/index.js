@@ -29,6 +29,7 @@
                 this.context.summary=this.context.summary || currentContent.get('summary');
                 
                 let crumbs='';
+                
                 const crumbCollection=await currentContent
                     .get('crumbs')
                     .then((crumbs)=>{
@@ -90,29 +91,30 @@
                     }
                     this.context.targetEl.innerHTML=returnString;
 
-                    let self=this;
+                    const self=this;
 
                     setTimeout(function(){
                             if(self.context.scrollpages){
                                 Mura(function(){
                             
-                                    var lastPage=self.context.collection.get('totalpages');
-                                    var currentPage=self.context.collection.get('pageindex');
+                                    const lastPage=self.context.collection.get('totalpages');
+                                    const currentPage=self.context.collection.get('pageindex');
 
                                     if(currentPage < lastPage){
 
-                                        var origininstanceid=self.context.origininstanceid || this.context.instanceid;
-                                        var nextPage=currentPage+1;
-                                        var collection=Mura('div[data-instanceid="' + origininstanceid + '"]');
-                                        var scrollcontent=Mura('div[data-instanceid="' + origininstanceid + '"] .mura-collection');
+                                        const origininstanceid=self.context.origininstanceid || this.context.instanceid;
+                                        const nextPage=currentPage+1;
+                                        const collection=Mura('div[data-instanceid="' + origininstanceid + '"]');
+                                        
+                                        let scrollcontent=Mura('div[data-instanceid="' + origininstanceid + '"] .mura-collection');
                                   
                                         if(!scrollcontent.length){
-                                            var scrollcontent=Mura('div[data-instanceid="' + origininstanceid + '"] > .mura-object-content');
+                                            scrollcontent=Mura('div[data-instanceid="' + origininstanceid + '"] > .mura-object-content');
                                         }
                                        
-                                        var pageEnd=Mura('#mura-page-end-' + pageid);
+                                        let pageEnd=Mura('#mura-page-end-' + pageid);
                                         if(!pageEnd.length){
-                                            var pageEnds=scrollcontent.find('.mura-collection-page-end');
+                                            const pageEnds=scrollcontent.find('.mura-collection-page-end');
                                             if(pageEnds.length){
                                                 pageEnds.first().before('<div id="mura-page-end-' + pageid + '" class="mura-collection-page-end"></div>');
                                             } else {
@@ -121,17 +123,17 @@
                                             pageEnd=Mura('##mura-page-end-' + pageid);
                                         }
 
-                                        var pageContainer=pageEnd;
+                                        const pageContainer=pageEnd;
                                     
                                         function conditionalScroll(){
                                             if(!Mura.editing && pageEnd.length && !pageContainer.data('handled')){
                                                 if(Mura.isScrolledIntoView(pageEnd.node)){
                                                     if(collection.length){
-                                                        var params= Mura.extend(collection.data(),{transient:true,label:'',origininstanceid:origininstanceid,class:'',objecticonclass:'',stylesupport:''});
+                                                        const params= Mura.extend(collection.data(),{transient:true,label:'',origininstanceid:origininstanceid,class:'',objecticonclass:'',stylesupport:''});
                                                         pageContainer.data('handled',true);
                                                         params.pagenum=nextPage;
                                                         pageContainer.appendModule(params).then(function(){
-                                                            var newContent=pageContainer.find('.mura-collection');
+                                                            let newContent=pageContainer.find('.mura-collection');
                                                             if(!newContent.length){
                                                                 newContent=pageContainer.find('.mura-object-content')
                                                             }
