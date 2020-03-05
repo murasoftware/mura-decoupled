@@ -210,7 +210,7 @@
 
                 currentContent=content;
                 
-               Mura.extend(Mura,content.get('config'));
+                Mura.extend(Mura,content.get('config'));
 
                 Mura('body').html(templates[content.get('template').split('.')[0]]);
 
