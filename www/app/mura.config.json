@@ -47,7 +47,13 @@
 				{"name":"Mura Violet","value":"##984ac1"},
 				{"name":"Mura Purple","value":"##6565df"},
 				{"name":"Mura Blue","value":"##2e5ad9"}
-			]
+			],
+			"ckeditor":{
+				"contentcss":"http://localhost/app/css/editor.css",
+				"templates":"",
+				"stylesset":"",
+				"customconfig":""
+			}
 		},
 		"modules":{
 			"Examplejs":{

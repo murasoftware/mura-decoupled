@@ -29,7 +29,7 @@
                 this.context.summary=this.context.summary || currentContent.get('summary');
                 
                 let crumbs='';
-                
+
                 const crumbCollection=await currentContent
                     .get('crumbs')
                     .then((crumbs)=>{
@@ -120,7 +120,7 @@
                                             } else {
                                                 scrollcontent.append('<div id="mura-page-end-' + pageid + '" class="mura-collection-page-end"></div>');
                                             }
-                                            pageEnd=Mura('##mura-page-end-' + pageid);
+                                            pageEnd=Mura('#mura-page-end-' + pageid);
                                         }
 
                                         const pageContainer=pageEnd;
@@ -267,7 +267,7 @@
                             content.get('subtype')=='Blog Post' || content.get('subtype')=='Article'
                         )
                     )){
-                    Mura('.mura-region-container[data-region="primarycontent"]').html(content.get('body'));
+                    Mura('.mura-region-container[data-region="primarycontent"]').html('<div class="container">' + content.get('body') + '</div>');
                 } else {
                     Mura('.mura-region-container').each(function(){
                     let item=Mura(this);
