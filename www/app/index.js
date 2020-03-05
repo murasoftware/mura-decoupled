@@ -70,7 +70,7 @@
                     returnString += "</ul>";
                     
                     if(this.context.scrollpages){
-                        var pageid=Mura.createUUID();
+                        let pageid=Mura.createUUID();
                         if(this.context.collection.get('totalpages') > this.context.collection.get('pageindex')){
                             returnString += `<div id="mura-page-end-${pageid}"/>`;
                         }
@@ -95,22 +95,60 @@
                     setTimeout(function(){
                             if(self.context.scrollpages){
                                 Mura(function(){
-                                    var pageEnd=Mura('#mura-page-end-' + pageid);
-                        
-                                    function conditionalScroll(){
-                                        if(!mura.editing && pageEnd.length){
-                                            if(Mura.isScrolledIntoView(pageEnd.node)){
-                                                var collection=pageEnd.parent().closest('div.mura-object[data-object="collection"],div.mura-object[data-object="folder"]');
-                                                if(collection.length){
-                                                    collection.insertModuleAfter( Mura.extend(collection.data(),{pagenum:'#nextPage#',transient:true,label:""}) ) 
-                                                }
+                            
+                                    var lastPage=self.context.collection.get('totalpages');
+                                    var currentPage=self.context.collection.get('pageindex');
+
+                                    if(currentPage < lastPage){
+
+                                        var origininstanceid=self.context.origininstanceid || this.context.instanceid;
+                                        var nextPage=currentPage+1;
+                                        var collection=Mura('div[data-instanceid="' + origininstanceid + '"]');
+                                        var scrollcontent=Mura('div[data-instanceid="' + origininstanceid + '"] .mura-collection');
+                                  
+                                        if(!scrollcontent.length){
+                                            var scrollcontent=Mura('div[data-instanceid="' + origininstanceid + '"] > .mura-object-content');
+                                        }
+                                       
+                                        var pageEnd=Mura('#mura-page-end-' + pageid);
+                                        if(!pageEnd.length){
+                                            var pageEnds=scrollcontent.find('.mura-collection-page-end');
+                                            if(pageEnds.length){
+                                                pageEnds.first().before('<div id="mura-page-end-' + pageid + '" class="mura-collection-page-end"></div>');
                                             } else {
-                                                setTimeout(conditionalScroll,250);
+                                                scrollcontent.append('<div id="mura-page-end-' + pageid + '" class="mura-collection-page-end"></div>');
+                                            }
+                                            pageEnd=Mura('##mura-page-end-' + pageid);
+                                        }
+
+                                        var pageContainer=pageEnd;
+                                    
+                                        function conditionalScroll(){
+                                            if(!Mura.editing && pageEnd.length && !pageContainer.data('handled')){
+                                                if(Mura.isScrolledIntoView(pageEnd.node)){
+                                                    if(collection.length){
+                                                        var params= Mura.extend(collection.data(),{transient:true,label:'',origininstanceid:origininstanceid,class:'',objecticonclass:'',stylesupport:''});
+                                                        pageContainer.data('handled',true);
+                                                        params.pagenum=nextPage;
+                                                        pageContainer.appendModule(params).then(function(){
+                                                            var newContent=pageContainer.find('.mura-collection');
+                                                            if(!newContent.length){
+                                                                newContent=pageContainer.find('.mura-object-content')
+                                                            }
+                                                            pageContainer.hide();
+                                                            newContent.forEach(function(){
+                                                                scrollcontent.find('.mura-collection-page-end').first().before(Mura(this).html())
+                                                                pageContainer.html('');
+                                                            })
+                                                        }) 
+                                                    }
+                                                } else if (!pageContainer.data('handled')){
+                                                    setTimeout(conditionalScroll,250);
+                                                }
                                             }
                                         }
+                                        conditionalScroll();
                                     }
-                        
-                                    conditionalScroll();
                                 })
                             } else {
                                 Mura(self.context.targetEl)
