@@ -31,7 +31,6 @@ robots.txt
 settings.xml
 Thumbs.db
 web.config
-web.xml
 server-*.json
 server.json
 
