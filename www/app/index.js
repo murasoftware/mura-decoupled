@@ -162,10 +162,7 @@
                         },
                         1
                     );
-
                     
-                
-
                 } else {
                     this.context.targetEl.innerHTML="<p>No matching content found</p>";
                 }
@@ -229,7 +226,6 @@
                     container.html('<li><a href="./#">Home</a></li>');
                 }
 
-                Mura.getEntity('content')
                 Mura.getFeed('content')
                 .where()
                 .prop('parentid').isEQ(parentid)
@@ -245,7 +241,7 @@
         
             Mura.renderFilename(
                 hash.split('#')[1],
-                Mura.extend(Mura.getQueryStringParams(),{expand:"crumbs"})
+                Mura.extend(query,{expand:"crumbs"})
             ).then(function(content){
 
                 currentContent=content;
