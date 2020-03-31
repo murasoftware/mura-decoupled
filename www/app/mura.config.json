@@ -59,7 +59,9 @@
 			"Examplejs":{
 				"name":"Examplejs",
 				"contenttypes":"*",
-				"configurator":"http://host.docker.internal/app/configurators/examplejs.html"
+				"configurator":[
+					{"type":"text","name":"mytitle","label":"My Label"}
+				]
 			},
 			"Examplecollectionlayout":{
 				"name":"Example Collection Layout",
