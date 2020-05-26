@@ -1,7 +1,7 @@
 {
 	"global":{
 		"rendererProperties":{
-			"templateArray":["Default"],
+			"templateArray":["default"],
 			"collectionLayoutArray":["Examplecollectionlayout"],
 			"hashurls":true,
 			"primaryContentTypes":"Page,Link,File",

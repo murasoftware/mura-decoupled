@@ -248,8 +248,8 @@
                 
                 Mura.extend(Mura,content.get('config'));
 
-                Mura('body').html(templates[content.get('template').split('.')[0]]);
-
+                Mura('body').html(templates[content.get('template').split('.')[0].toLowerCase()]);
+           
                 Mura('.mura-html-queues').html(content.get('htmlheadqueue') + content.get('htmlfootqueue'));
             
                 if (query.doaction && query.doaction=='logout'){
@@ -268,13 +268,11 @@
                     Mura('.mura-region-container').each(function(){
                     let item=Mura(this);
                     item.html(
-                            content.renderDisplayRegion(
-                            item.data('region')
-                        )
+                            content.renderDisplayRegion( item.data('region') )
                         );
                     })
                 }
-            
+               
                 Mura(document).processMarkup();
                
                 buildNav(
